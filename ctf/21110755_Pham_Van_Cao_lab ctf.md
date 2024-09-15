@@ -10,8 +10,8 @@ we have stack frame:
 
 | Stack frame             | Replace value                                                          | Hình ảnh               |
 | ----------------------- | ---------------------------------------------------------------------- | ---------------------- |
-| `buf + EBP`             | Replace with 104 'a' characters                                        | ![alt text](img/2.png) |
-| Return address          | Replace with the address of the myfunc function                        | ![alt text](img/3.png) |
+| `buf + EBP`             | Replace with 104 'a' characters                                        |                        |
+| Return address          | Replace with the address of the myfunc function                        | ![alt text](img/2.png) |
 | Tạo file                | Create flag1.txt to pass the check in myfunc                           | ![alt text](img/3.png) |
 | Parameter `s` (4 bytes) | Replace with the address of the exit function to exit myfunc           | ![alt text](img/4.png) |
 | 8 bytes                 | Replace with the values of p and q to pass the if conditions in myfunc | ![alt text](img/5.png) |
