@@ -22,3 +22,20 @@ With the stack frame of the C program, we perform the buffer overflow by writing
 
 ![alt text](imgs/4.png)
 
+First, we quickly find the addresses of the system() and exit() functions using the commands print system and print exit in gdb-peda.
+
+![alt text](imgs/5.png)
+
+Next, we find the address of the argument for the system() function. First, we locate the address of the environment variable DELFILE using the command find DELFILE. After that, we see that the first 8 bytes contain the name of the environment variable, and by calculating the assignment =, we can add 8 bytes to access the string value of the DELFILE variable.
+
+![alt text](imgs/6.png)
+
+Then, we create a simple payload using Python
+
+![alt text](imgs/7.png)
+
+In conclusion, we have successfully executed the shellcode and deleted the dummy file.
+
+![alt text](imgs/8.png)
+
+![alt text](imgs/9.png)
